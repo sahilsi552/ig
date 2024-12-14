@@ -1,7 +1,7 @@
 import requests
 from pyrogram import filters
 
-from BrandrdXMusic import app
+from AviaxMusic import app
 
 
 @app.on_message(filters.command(["ig", "instagram", "reel"]))
