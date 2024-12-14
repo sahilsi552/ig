@@ -24,13 +24,13 @@ try:
 except requests.JSONDecodeError:
     print("Response is not valid JSON. Raw response:")
     print(response.text)  # Print raw response for debugging
-    await a.edit("Invalid response received from the server.")
+        await a.edit("Invalid response received from the server.")
     return
 
 # Check if the API response indicates success
 if data.get("status"):  # Use `.get()` to avoid KeyErrors
     video_url = data["data"][0]["url"]
-    await a.delete()
-    await client.send_video(message.chat.id, video_url)
+        await a.delete()
+        await client.send_video(message.chat.id, video_url)
 else:
-    await a.edit("Fᴀɪʟᴇᴅ ᴛᴏ ᴅᴏᴡɴʟᴏᴀᴅ ʀᴇᴇʟ")
+        await a.edit("Fᴀɪʟᴇᴅ ᴛᴏ ᴅᴏᴡɴʟᴏᴀᴅ ʀᴇᴇʟ")
