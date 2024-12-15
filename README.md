@@ -66,7 +66,7 @@ This process will allow you to bypass the YouTube restrictions and ensure smooth
    ```
 5. **Clone the Repository**
    ```bash
-   git clone https://github.com/sahilsi552/music && cd music
+   git clone https://github.com/sahilsi552/musics && cd musics
    ```
 6. **Install Requirements**
    ```bash
