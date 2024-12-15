@@ -1,36 +1,111 @@
-import requests
-from pyrogram import filters
+from telegram import Update, Bot
+
+import httpx
+
+
 
 from AviaxMusic import app
 
+from pyrogram import filters
 
-@app.on_message(filters.command(["ig", "instagram", "reel"]))
-async def download_instagram_video(client, message):
+
+
+
+
+DOWNLOADING_STICKER_ID = (
+
+    "CAACAgEAAx0CfD7LAgACO7xmZzb83lrLUVhxtmUaanKe0_ionAAC-gADUSkNORIJSVEUKRrhHgQ"
+
+)
+
+API_URL = "https://karma-api2.vercel.app/instadl"  # Replace with your actual API URL
+
+
+
+
+
+@app.on_message(filters.command(["ig", "insta"]))
+
+async def instadl_command_handler(client, message):
+
     if len(message.command) < 2:
-        await message.reply_text(
-            "Pʟᴇᴀsᴇ ᴘʀᴏᴠɪᴅᴇ ᴛʜᴇ Iɴsᴛᴀɢʀᴀᴍ ʀᴇᴇʟ URL ᴀғᴛᴇʀ ᴛʜᴇ ᴄᴏᴍᴍᴀɴᴅ"
-        )
+
+        await message.reply_text("Usage: /insta [Instagram URL]")
+
         return
-    a = await message.reply_text("ᴘʀᴏᴄᴇssɪɴɢ...")
-    url = message.text.split()[1]
-    api_url = (
-        f"https://nodejs-1xn1lcfy3-jobians.vercel.app/v2/downloader/instagram?url={url}"
-    )
 
-    response = requests.get(api_url)
 
-try:
-    data = response.json()  # Attempt to parse JSON
-except requests.JSONDecodeError:
-    print("Response is not valid JSON. Raw response:")
-    print(response.text)  # Print raw response for debugging
-        await a.edit("Invalid response received from the server.")
-    return
 
-# Check if the API response indicates success
-if data.get("status"):  # Use `.get()` to avoid KeyErrors
-    video_url = data["data"][0]["url"]
-        await a.delete()
-        await client.send_video(message.chat.id, video_url)
-else:
-        await a.edit("Fᴀɪʟᴇᴅ ᴛᴏ ᴅᴏᴡɴʟᴏᴀᴅ ʀᴇᴇʟ")
+    link = message.command[1]
+
+    try:
+
+        downloading_sticker = await message.reply_sticker(DOWNLOADING_STICKER_ID)
+
+
+
+        # Make an asynchronous GET request to the API using httpx
+
+        async with httpx.AsyncClient() as client:
+
+            response = await client.get(API_URL, params={"url": link})
+
+            response.raise_for_status()
+
+            data = response.json()
+
+
+
+        # Check if the API request was successful
+
+        if "content_url" in data:
+
+            content_url = data["content_url"]
+
+
+
+            # Determine content type from the URL
+
+            content_type = "video" if "video" in content_url else "photo"
+
+
+
+            # Reply with either photo or video
+
+            if content_type == "photo":
+
+                await message.reply_photo(content_url)
+
+            elif content_type == "video":
+
+                await message.reply_video(content_url)
+
+            else:
+
+                await message.reply_text("Unsupported content type.")
+
+        else:
+
+            await message.reply_text(
+
+                "Unable to fetch content. Please check the Instagram URL or try with another Instagram link."
+
+            )
+
+
+
+    except Exception as e:
+
+        print(e)
+
+        await message.reply_text(
+
+            "An error occurred while processing the request."
+
+        )
+
+
+
+    finally:
+
+        await downloading_sticker.delete()
