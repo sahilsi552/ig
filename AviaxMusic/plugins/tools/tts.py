@@ -3,7 +3,7 @@ import io
 from gtts import gTTS
 from pyrogram import filters
 
-from AviaxXMusic import app
+from AviaxMusic import app
 
 
 @app.on_message(filters.command("tts"))
