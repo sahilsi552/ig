@@ -20,9 +20,9 @@ from pytgcalls.exceptions import (NoActiveGroupCall, TelegramServerError, Alread
 
 @app.on_message(filters.command(["vcinfo"], ["/", "!"]))
 async def strcall(client, message):
-    assistant = await group_assistant(DAXX, message.chat.id)
+    assistant = await group_assistant(Aviax, message.chat.id)
     try:
-        await assistant.join_group_call(message.chat.id, AudioPiped("./DAXXMUSIC/assets/call.mp3"), stream_type=StreamType().pulse_stream)
+        await assistant.join_group_call(message.chat.id, AudioPiped("./AviaxMusic/assets/call.mp3"), stream_type=StreamType().pulse_stream)
         text = "- Beloveds in the call 🫶 :\n\n"
         participants = await assistant.get_participants(message.chat.id)
         k = 0
