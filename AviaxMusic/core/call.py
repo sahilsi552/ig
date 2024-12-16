@@ -568,24 +568,5 @@ class Call(PyTgCalls):
         if config.STRING5:
             await self.five.start()
 
-    async def decorators(self):
-        @self.one.on_update(fl.chat_update(ChatUpdate.Status.LEFT_CALL))
-        @self.two.on_update(fl.chat_update(ChatUpdate.Status.LEFT_CALL))
-        @self.three.on_update(fl.chat_update(ChatUpdate.Status.LEFT_CALL))
-        @self.four.on_update(fl.chat_update(ChatUpdate.Status.LEFT_CALL))
-        @self.five.on_update(fl.chat_update(ChatUpdate.Status.LEFT_CALL))
-        async def stream_services_handler(client, update):
-            await _clear_(update.chat_id)
-            await self.stop_stream(update.chat_id)
-
-        @self.one.on_update(fl.stream_end)
-        @self.two.on_update(fl.stream_end)
-        @self.three.on_update(fl.stream_end)
-        @self.four.on_update(fl.stream_end)
-        @self.five.on_update(fl.stream_end)
-        async def stream_end_handler1(client, update: Update):
-            if not isinstance(update, StreamAudioEnded):
-                return
-            await self.change_stream(client, update.chat_id)
 
 Aviax = Call()
